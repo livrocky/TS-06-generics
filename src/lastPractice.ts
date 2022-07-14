@@ -1,6 +1,6 @@
+/* eslint-disable max-len */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 interface SimpleUser {
   id: string;
@@ -28,13 +28,29 @@ const usersT: SimpleUser[] = [
     hasDog: true,
   },
 ];
+
+type RezType = Record<SimpleUser['id'], Omit<SimpleUser, 'id'>>;
+
+const transformToRez = (arr: SimpleUser[]): RezType => {
+  return arr.reduce((acc: RezType, curr: SimpleUser) => {
+    // curr = { id: 'u_1', name: 'John', town: 'London', hasDog: false }
+    // rest = {name: 'John', town: 'London', hasDog: false}
+    const { id, ...rest } = curr;
+    acc[id] = rest;
+    return acc;
+  }, {});
+};
+
+console.log(transformToRez(usersT));
+const rez1: RezType = transformToRez(usersT);
+
 const rez = {
   u_1: { name: 'John', town: 'London', hasDog: false },
   u_2: { name: 'Jill', town: 'Kaunas', hasDog: true },
   u_3: { name: 'Serbentautas', town: 'Klaipeda', hasDog: true },
 };
 
-console.log('usersT ===', usersT);
+// console.log('usersT ===', usersT);
 // 4 grazina masyva kuriame yra masyvas, kurio pirmas elemnetas yra id, o antrras ar turi suni. Tipai pagal usersT
 // [
 //   ['u_1', false],
@@ -54,7 +70,7 @@ const ourFn: TransformToIdAndHasDog = (arr) => {
 const ourFnShort: TransformToIdAndHasDog = (arr) =>
   arr.map((uObj: SimpleUser): IdAndHasDog => [uObj.id, uObj.hasDog]);
 
-console.log(ourFnShort(usersT));
+// console.log(ourFnShort(usersT));
 
 // type IdAndHasDogOr = (string | boolean)[];
 
